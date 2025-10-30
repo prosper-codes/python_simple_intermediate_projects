@@ -1,6 +1,6 @@
 from tkinter import *
 
-from sqlalchemy import column
+
 
 root = Tk()
 display = Entry(root)
@@ -21,7 +21,7 @@ operations = ['+','-',"*","/","3.14","%","(","**",")","**2"]
 for x in range(3):
     for y in range(4):
         if count < len(operations):
-            button=Button(root,text = operations[count])
+            button=Button(root,text = operations[count],width=2,height=2)
             count+=1
             button.grid(row=x+2, column=y+3)
 
