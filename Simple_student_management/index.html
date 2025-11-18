@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Management System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 30px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #667eea;
+            margin-bottom: 30px;
+        }
+
+        .form-section {
+            border: 2px solid #667eea;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            background: #f8f9ff;
+        }
+
+        .form-section h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+
+        .form-group {
+            display: grid;
+            grid-template-columns: 120px 1fr;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .form-group input {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+
+        .btn-create {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-create:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-insert {
+            background: #2196F3;
+            color: white;
+        }
+
+        .btn-insert:hover {
+            background: #0b7dda;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-update {
+            background: #FF9800;
+            color: white;
+        }
+
+        .btn-update:hover {
+            background: #e68900;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-delete {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-delete:hover {
+            background: #da190b;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .table-container {
+            overflow-x: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #667eea;
+            color: white;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            font-weight: bold;
+            text-align: center;
+        }
+
+        tbody tr:hover {
+            background: #f5f5f5;
+            cursor: pointer;
+        }
+
+        tbody tr.selected {
+            background: #e3f2fd;
+        }
+
+        .message {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            font-weight: bold;
+            text-align: center;
+            animation: slideIn 0.3s;
+        }
+
+        .message.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .message.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Student Management System</h1>
+
+        <div id="messageArea"></div>
+
+        <div class="form-section">
+            <h2>Student Data</h2>
+            <div class="form-group">
+                <label for="name">Name:</label>
+                <input type="text" id="name" placeholder="Enter student name">
+            </div>
+            <div class="form-group">
+                <label for="address">Address:</label>
+                <input type="text" id="address" placeholder="Enter address">
+            </div>
+            <div class="form-group">
+                <label for="age">Age:</label>
+                <input type="number" id="age" placeholder="Enter age">
+            </div>
+            <div class="form-group">
+                <label for="number">Phone Number:</label>
+                <input type="text" id="number" placeholder="Enter phone number">
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="btn-create" onclick="createTable()">Create Table</button>
+            <button class="btn-insert" onclick="insertData()">Insert Data</button>
+            <button class="btn-update" onclick="updateData()">Update Data</button>
+            <button class="btn-delete" onclick="deleteData()">Delete Data</button>
+        </div>
+
+        <div class="table-container">
+            <table id="studentTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Address</th>
+                        <th>Age</th>
+                        <th>Phone Number</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                    <tr>
+                        <td colspan="5" class="empty-state">No records found. Create table to get started.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // In-memory database to simulate PostgreSQL
+        let students = [];
+        let nextId = 1;
+        let selectedRow = null;
+        let tableCreated = false;
+
+        // Show message function
+        function showMessage(message, type = 'success') {
+            const messageArea = document.getElementById('messageArea');
+            messageArea.innerHTML = `<div class="message ${type}">${message}</div>`;
+            setTimeout(() => {
+                messageArea.innerHTML = '';
+            }, 3000);
+        }
+
+        // Create table function
+        function createTable() {
+            tableCreated = true;
+            students = [];
+            nextId = 1;
+            showMessage('Table created successfully.');
+            refreshTreeview();
+        }
+
+        // Refresh treeview function
+        function refreshTreeview() {
+            const tableBody = document.getElementById('tableBody');
+            tableBody.innerHTML = '';
+
+            if (students.length === 0) {
+                tableBody.innerHTML = '<tr><td colspan="5" class="empty-state">No records found.</td></tr>';
+                return;
+            }
+
+            students.forEach((student, index) => {
+                const row = document.createElement('tr');
+                row.onclick = function () {
+                    selectRow(this, index);
+                };
+
+                row.innerHTML = `
+                    <td style="text-align: center;">${student.id}</td>
+                    <td>${student.name}</td>
+                    <td>${student.address}</td>
+                    <td style="text-align: center;">${student.age}</td>
+                    <td>${student.number}</td>
+                `;
+
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Select row function
+        function selectRow(row, index) {
+            // Remove selection from all rows
+            const allRows = document.querySelectorAll('#tableBody tr');
+            allRows.forEach(r => r.classList.remove('selected'));
+
+            // Add selection to clicked row
+            row.classList.add('selected');
+            selectedRow = index;
+
+            // Fill form with selected data
+            const student = students[index];
+            document.getElementById('name').value = student.name;
+            document.getElementById('address').value = student.address;
+            document.getElementById('age').value = student.age;
+            document.getElementById('number').value = student.number;
+        }
+
+        // Insert data function
+        function insertData() {
+            if (!tableCreated) {
+                showMessage('Please create table first.', 'error');
+                return;
+            }
+
+            const name = document.getElementById('name').value;
+            const address = document.getElementById('address').value;
+            const age = document.getElementById('age').value;
+            const number = document.getElementById('number').value;
+
+            if (!name || !address || !age || !number) {
+                showMessage('Please fill all fields.', 'error');
+                return;
+            }
+
+            const newStudent = {
+                id: nextId++,
+                name: name,
+                address: address,
+                age: parseInt(age),
+                number: number
+            };
+
+            students.push(newStudent);
+            showMessage('Data inserted successfully.');
+            clearForm();
+            refreshTreeview();
+        }
+
+        // Update data function
+        function updateData() {
+            if (!tableCreated) {
+                showMessage('Please create table first.', 'error');
+                return;
+            }
+
+            if (selectedRow === null) {
+                showMessage('Please select a record to update.', 'error');
+                return;
+            }
+
+            const name = document.getElementById('name').value;
+            const address = document.getElementById('address').value;
+            const age = document.getElementById('age').value;
+            const number = document.getElementById('number').value;
+
+            if (!name || !address || !age || !number) {
+                showMessage('Please fill all fields.', 'error');
+                return;
+            }
+
+            students[selectedRow] = {
+                id: students[selectedRow].id,
+                name: name,
+                address: address,
+                age: parseInt(age),
+                number: number
+            };
+
+            showMessage('Data updated successfully.');
+            clearForm();
+            selectedRow = null;
+            refreshTreeview();
+        }
+
+        // Delete data function
+        function deleteData() {
+            if (!tableCreated) {
+                showMessage('Please create table first.', 'error');
+                return;
+            }
+
+            if (selectedRow === null) {
+                showMessage('Please select a record to delete.', 'error');
+                return;
+            }
+
+            students.splice(selectedRow, 1);
+            showMessage('Data deleted successfully.');
+            clearForm();
+            selectedRow = null;
+            refreshTreeview();
+        }
+
+        // Clear form function
+        function clearForm() {
+            document.getElementById('name').value = '';
+            document.getElementById('address').value = '';
+            document.getElementById('age').value = '';
+            document.getElementById('number').value = '';
+        }
+
+        // Initialize on page load
+        refreshTreeview();
+    </script>
+</body>
+
+</html>
