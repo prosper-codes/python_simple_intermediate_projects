@@ -1,33 +1,32 @@
-card_no = "5610591081018250"
-numbers = list(card_no)
-sum_of_odd = 0
-double_value_list=[]
-sum_of_even=0
-
-for (idx,val) in enumerate(numbers):
-    if idx %2 !=0:
-        sum_of_odd+=int(val)
+# Sample card: 5610591081018250
+def is_valid_card(card_no):
     
-    else:
-        double_value_list.append(int(val)*2)
-        
-                
+    if not card_no:
+        return "Card number cannot be empty"
 
-double_value_list_string=""
-for s in double_value_list:
-    double_value_list_string+=str(s)
+    card_no = card_no.replace(" ", "").replace("-", "")
+
+    if not card_no.isdigit():
+        return "Card number must contain only digits"
+
+    if not 13 <= len(card_no) <= 19:
+        return "Invalid card length"
     
-double_value_list= list(double_value_list_string)
 
-for x in double_value_list:
-     sum_of_even+= int(x)
-     
-total =sum_of_even+sum_of_odd
+    total = 0
 
-if total % 10 == 0:
-    print("this card is Valid")
+    for idx, digit in enumerate(card_no):
+        n = int(digit)
 
-else:
-    print("this card is invalid")
-    
- 
+        if idx % 2 == 0:      # double digits at even index
+            n *= 2
+            if n > 9:
+                n -= 9
+
+        total += n
+
+    return "This card is valid" if total % 10 == 0 else "This card is invalid"
+
+
+card_no = input("Enter the card number: ")
+print(is_valid_card(card_no))
