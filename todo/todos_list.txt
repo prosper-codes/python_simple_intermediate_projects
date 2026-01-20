@@ -1,2 +1,4 @@
+sportsrun
+eat
 walk
-sports
+study
