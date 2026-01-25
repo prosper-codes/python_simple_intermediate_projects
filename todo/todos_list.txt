@@ -1,5 +1,4 @@
-sportsrun
 running
 walk
-eatmaster javamaster python
-cookinggo to church
+sports
+run
