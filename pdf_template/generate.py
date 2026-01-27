@@ -18,8 +18,23 @@ for index , row in df.iterrows():
         new_x="LMARGIN",
         new_y="NEXT"
     )
+    for y in range(20,198,10):
+        pdf.line(10,y,200,y)
+
     for i in range(row["Pages"]-1):
         pdf.add_page()
 
+        pdf.ln(277)
+        pdf.cell(
+            w=0,
+            h=12,
+            text=row["Topic"],
+            align="L",
+            new_x="LMARGIN",
+            new_y="NEXT"
+        )
+
+        for y in range(20, 198, 10):
+            pdf.line(10, y, 200, y)
 
 pdf.output("output.pdf")
