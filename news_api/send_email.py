@@ -7,9 +7,9 @@ def send_email(message):
      host = "smtp.gmail.com"
      port = 587
 
-     username = "your email"
-     password = "your password"
-     receiver = "receiver email"
+     username = "youremail@gmail.com"
+     password = "password"
+     receiver = "receiveremail@gmail.com"
 
      context = ssl.create_default_context()
 
@@ -23,7 +23,8 @@ def send_email(message):
          server.sendmail(
              username,
              receiver,
-             f"Subject: Test Email\n\n{message}"
+             f"Subject: Test Email\n\n{message}".encode("utf-8")
+
          )
 
 
