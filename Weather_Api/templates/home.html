@@ -2,13 +2,100 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Weather Data API</title>
+    <title>Weather Data API Documentation</title>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f7f9fc;
+            color: #333;
+            margin: 0;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: auto;
+            background: #ffffff;
+            padding: 30px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        h1 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+
+        h2 {
+            margin-top: 30px;
+            color: #34495e;
+        }
+
+        p {
+            line-height: 1.6;
+        }
+
+        code {
+            background-color: #eef2f7;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-family: Consolas, monospace;
+            font-size: 0.95em;
+        }
+
+        .endpoint {
+            margin: 15px 0;
+        }
+
+        .note {
+            margin-top: 30px;
+            padding: 15px;
+            background-color: #f0f8ff;
+            border-left: 4px solid #3498db;
+            border-radius: 4px;
+        }
+    </style>
 </head>
 <body>
 
-<h1> Weather Data API</h1>
-<p> URL format: http://127.0.0.1:5000/api/v1/station/date </p>
-<p> URL Example: http://127.0.0.1:5000/api/v1/10/1988-10-25 </p>
-<p>{{data | safe}}</p>
+<div class="container">
+    <h1>🌦️ Weather Data API</h1>
+
+    <p>
+        This API provides historical weather data by station, date, and year.
+        All responses are returned in JSON format.
+    </p>
+
+    <h2>Base URL</h2>
+    <p>
+        <code>http://127.0.0.1:5000/api/v1</code>
+    </p>
+
+    <h2>Endpoints</h2>
+
+    <div class="endpoint">
+        <p><strong>One station for one date</strong></p>
+        <code>/station/date</code><br>
+        <code>http://127.0.0.1:5000/api/v1/10/1988-10-25</code>
+    </div>
+
+    <div class="endpoint">
+        <p><strong>One station for all dates</strong></p>
+        <code>/station</code><br>
+        <code>http://127.0.0.1:5000/api/v1/10</code>
+    </div>
+
+    <div class="endpoint">
+        <p><strong>One station for one year</strong></p>
+        <code>/yearly/station/year</code><br>
+        <code>http://127.0.0.1:5000/api/v1/yearly/10/1998</code>
+    </div>
+
+    <div class="note">
+        <strong>Response Preview:</strong>
+        <p>{{ data | safe }}</p>
+    </div>
+</div>
+
 </body>
 </html>
