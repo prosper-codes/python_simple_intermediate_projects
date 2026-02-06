@@ -1,17 +1,28 @@
+import os
+import time
 import cv2
-
 import mail
-
-
-from news_api.send_email import send_email
+import glob
 
 video = cv2.VideoCapture(0)
+time.sleep(1)
+
 first_frame = None
 status_list = []
+count = 1
+
+def clean_folder():
+    images = glob.glob("images/*.png")
+    for image in images:
+        if os.path.exists(image):
+            os.remove(image)
+
+
 while True:
     status = 0
 
     check , frame = video.read()
+
     gray_frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     gray_frame_gau = cv2.GaussianBlur(gray_frame, (21, 21), 0)
     cv2.imshow("My video", frame)
@@ -37,12 +48,18 @@ while True:
 
         if rect.any():
             status = 1
+            cv2.imwrite(f"images/{count}.png", frame)
+            count = count + 1
+            all_images = glob.glob("images/*.png")
+            index = int(len(all_images) / 2)
+            image_with_object = all_images[index]
 
     status_list.append(status)
     status_list = status_list[-2:]
 
-    if status_list[0] ==1 and status_list[1] == 0:
-        mail.send_mail()
+    if status_list[0] == 1 and status_list[1] == 0:
+        mail.send_mail(image_with_object)
+        clean_folder()
 
 
     cv2.imshow("My video", frame)
