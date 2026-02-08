@@ -2,10 +2,13 @@ import  requests
 import selectorlib
 import  smtplib
 from email.message import EmailMessage
+import sqlite3
 
-SENDER = "takundanhau89@gmail.com"
-PASSWORD = "hxwgxqcjcikexbcs"
-RECEIVER = "takundanhau89@gmail.com"
+connection = sqlite3.connect("data.db")
+
+SENDER = "senders email"
+PASSWORD = "your password"
+RECEIVER = "receivers email"
 
 URl = "http://programmer100.pythonanywhere.com/tours/"
 HEADERS = {
@@ -20,15 +23,15 @@ def scrape(url):
     return source
 
 def extract(source):
-    extraxtor = selectorlib.Extractor.from_yaml_file("extract.yaml")
-    value = extraxtor.extract(source)["tours"]
+    extractor = selectorlib.Extractor.from_yaml_file("extract.yaml")
+    value = extractor.extract(source)["tours"]
     return value
 
 
 def send_mail(messeage):
     email_message = EmailMessage()
     email_message["Subject"]  = "New Tour Detected"
-
+    email_message["body"] = messeage
 
     gmail = smtplib.SMTP("smtp.gmail.com", 587)
     gmail.ehlo()
@@ -41,20 +44,32 @@ def send_mail(messeage):
 
 
 def store(extracted):
-    with open("data.txt", "a") as file :
-        file.write(extracted + "\n")
-
+    row = extracted.split(",")
+    row = [item.strip() for item in row]
+    cursor = connection.cursor()
+    cursor.execute("INSERT INTO events VALUES (?,?,?)",row)
+    connection.commit()
 
 def read(extracted):
-    with open("data.txt", "r") as file:
-        return file.read()
+    row = extracted.split(",")
+    row = [item.strip() for item in row]
+    band, city, date = row
+    cursor = connection.cursor()
+    cursor.execute("SELECT * FROM events WHERE band=? AND city=? AND date=?", (band, city, date))
+    rows = cursor.fetchall()
+    print (rows)
+    return rows
 
 if __name__ =="__main__":
-    scarped = scrape(URl)
-    extracted = extract(scarped)
-    print(extracted)
-    content = read(extracted)
-    if extracted != "No upcoming tours":
-        if extracted not in content:
-            store(extracted)
-            send_mail(messeage="hey we found a message")
+    while True:
+
+        scarped = scrape(URl)
+        extracted = extract(scarped)
+        print(extracted)
+
+
+        if extracted != "No upcoming tours":
+            row = read(extracted)
+            if not  row:
+                store(extracted)
+                send_mail(messeage="hey we found a message")
