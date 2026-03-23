@@ -26,6 +26,12 @@ def  index(request):
                                          to=[email])
             email_message.send()
             messages.success(request, "Your Application was submitted successfully ")
+            form = AplicantsForm()
 
+    else:
+        form = AplicantsForm()
 
     return render(request, "index.html")
+
+def about(request):
+    return render(request, "about.html")
