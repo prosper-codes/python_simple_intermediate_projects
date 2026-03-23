@@ -1,14 +1,31 @@
 from django.shortcuts import render
-from forms import AplicantsForm
+from .forms import AplicantsForm
+from .models import Form
+from django.contrib import messages
+from django.core.mail import EmailMessage
+
 
 def  index(request):
-    if request.methord == "POST":
-        form =AplicantsForm()
-        first_name = form.cleaned_data["first_name"]
-        last_name = form.cleaned_data["last_name"]
-        email = form.cleaned_data["email"]
-        occupation = form.cleaned_data["occupation"]
+    if request.method == "POST":
+        form =AplicantsForm(request.POST)
 
+        if form.is_valid():
+
+            first_name = form.cleaned_data["first_name"]
+            last_name = form.cleaned_data["last_name"]
+            email = form.cleaned_data["email"]
+            date = form.cleaned_data["date"]
+            occupation = form.cleaned_data["occupation"]
+
+
+            Form.objects.create(first_name=first_name, last_name=last_name, email=email, date=date
+                                ,occupation=occupation)
+
+            message_body = f"A new Job application was submitted. Thank You. {first_name}"
+            email_message = EmailMessage("Form submission confirmation", message_body,
+                                         to=[email])
+            email_message.send()
+            messages.success(request, "Your Application was submitted successfully ")
 
 
     return render(request, "index.html")
