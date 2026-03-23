@@ -163,7 +163,7 @@ path('about/', views.about, name='about')
 
 ## 👨‍💻 Author
 
-Your Name
+prosper-codes
 
 ---
 
