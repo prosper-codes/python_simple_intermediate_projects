@@ -1,16 +1,17 @@
 from django.shortcuts import render
 from django.views import  generic
-from .models import Item
+from .models import Item, MEAL_TYPE
 
-# Create your views here.
 class MenuList(generic.ListView):
-    queryset = Item.objects.order_by("date_created")
-    template_name = "index.html"
-
-    def get_context_data(self):
-        context = {"meals": "Pizza"}
-        return context
-
-class MenuItemDetails(MenuList):
     model = Item
-    template_name = "menu_item_details"
+    template_name = "index.html"
+    context_object_name = "items"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+
+        context["grouped_items"] = {}
+        for key, value in MEAL_TYPE:
+            context["grouped_items"][value] = Item.objects.filter(meal_type=key)
+
+        return context

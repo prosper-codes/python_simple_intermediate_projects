@@ -2,10 +2,83 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>{{ item.meal }}</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 40px;
+            background-color: #f8f8f8;
+        }
+
+        .container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+        }
+
+        .price {
+            font-size: 20px;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .category {
+            color: #888;
+            margin-bottom: 15px;
+        }
+
+        .status {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        .available {
+            color: green;
+        }
+
+        .unavailable {
+            color: red;
+        }
+
+        a {
+            display: inline-block;
+            margin-top: 20px;
+            text-decoration: none;
+            color: #3498db;
+        }
+    </style>
 </head>
 <body>
-<h1>Menu Page</h1>
+
+<div class="container">
+    <h1>{{ item.meal }}</h1>
+
+    <p class="category">{{ item.get_meal_type_display }}</p>
+
+    <p class="price">${{ item.price }}</p>
+
+    <p>{{ item.description }}</p>
+
+    <p class="status">
+        Status:
+        {% if item.status == 1 %}
+            <span class="available">Available</span>
+        {% else %}
+            <span class="unavailable">Unavailable</span>
+        {% endif %}
+    </p>
+
+    <p><strong>Added by:</strong> {{ item.author }}</p>
+
+    <p><small>Created: {{ item.date_created }}</small></p>
+    <p><small>Updated: {{ item.date_updated }}</small></p>
+
+    <a href="/">⬅ Back to Menu</a>
+</div>
 
 </body>
 </html>
